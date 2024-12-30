@@ -3,6 +3,8 @@ package com.example.spring_boot.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "sick_note")
@@ -20,6 +22,9 @@ public class SickNote {
 
     // endDate can be calculated at the application level or with a DB trigger
     private LocalDate endDate;
+
+    @OneToMany(mappedBy = "sickNote", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Visit> visits = new ArrayList<>();
 
     // Constructors
     public SickNote() {}
@@ -61,5 +66,15 @@ public class SickNote {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public void addVisit(Visit visit) {
+        visits.add(visit);
+        visit.setSickNote(this);
+    }
+
+    public void removeVisit(Visit visit) {
+        visits.remove(visit);
+        visit.setSickNote(null);
     }
 }

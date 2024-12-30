@@ -1,6 +1,8 @@
 package com.example.spring_boot.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "treatment")
@@ -12,6 +14,9 @@ public class Treatment {
 
     @Column(length = 500)
     private String treatmentDescription;
+
+    @OneToMany(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Visit> visits = new ArrayList<>();
 
     // Constructors
     public Treatment() {}
@@ -35,5 +40,15 @@ public class Treatment {
 
     public void setTreatmentDescription(String treatmentDescription) {
         this.treatmentDescription = treatmentDescription;
+    }
+
+    public void addVisit(Visit visit) {
+        visits.add(visit);
+        visit.setTreatment(this);
+    }
+
+    public void removeVisit(Visit visit) {
+        visits.remove(visit);
+        visit.setTreatment(null);
     }
 }

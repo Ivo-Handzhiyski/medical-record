@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Medical Record Application</title>
+</head>
+<body>
+<h1>Welcome to the Medical Record System</h1>
+<p>This is the homepage of the application.</p>
+
+<!-- Example links to other pages -->
+<ul>
+    <li><a th:href="@{/api/doctors}">Doctors API Endpoint</a></li>
+    <li><a th:href="@{/api/patients}">Patients API Endpoint</a></li>
+    <li><a th:href="@{/api/diagnoses}">Diagnoses API Endpoint</a></li>
+    <li><a th:href="@{/api/visits}">Visits API Endpoint</a></li>
+    <li><a th:href="@{/api/treatments}">Treatments API Endpoint</a></li>
+    <li><a th:href="@{/api/sicknotes}">Sick Notes API Endpoint</a></li>
+</ul>
+</body>
+</html>

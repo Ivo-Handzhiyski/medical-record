@@ -3,6 +3,7 @@ package com.example.spring_boot.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "patient")
@@ -10,6 +11,7 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patientid")
     private Long patientID;
 
     @Column(nullable = false, length = 100)
@@ -18,12 +20,11 @@ public class Patient {
     @Column(nullable = false, length = 20)
     private String personalNumber; // e.g., SSN or national ID
 
-    @Column(nullable = false)
+    @Column(name = "has_paid_insurance_for_last6months", nullable = false)
     private boolean hasPaidInsuranceForLast6Months;
 
-    // Each patient has exactly one personal (primary care) doctor
-    @ManyToOne
-    @JoinColumn(name = "personalDoctorID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personal_doctorid")
     private Doctor personalDoctor;
 
     // One patient can have many visits
@@ -33,10 +34,11 @@ public class Patient {
     // Constructors
     public Patient() {}
 
-    public Patient(String name, String personalNumber, boolean hasPaidInsuranceForLast6Months) {
+    public Patient(String name, String personalNumber, boolean hasPaidInsuranceForLast6Months, Doctor personalDoctor) {
         this.name = name;
         this.personalNumber = personalNumber;
         this.hasPaidInsuranceForLast6Months = hasPaidInsuranceForLast6Months;
+        this.personalDoctor = personalDoctor;
     }
 
     // Getters and Setters
@@ -64,7 +66,7 @@ public class Patient {
         this.personalNumber = personalNumber;
     }
 
-    public boolean isHasPaidInsuranceForLast6Months() {
+    public boolean getHasPaidInsuranceForLast6Months() {
         return hasPaidInsuranceForLast6Months;
     }
 
@@ -72,11 +74,11 @@ public class Patient {
         this.hasPaidInsuranceForLast6Months = hasPaidInsuranceForLast6Months;
     }
 
-    public Doctor getPersonalDoctor() {
+    public Doctor getPersonalDoctorId() {
         return personalDoctor;
     }
 
-    public void setPersonalDoctor(Doctor personalDoctor) {
+    public void setPersonalDoctorId(Doctor personalDoctor) {
         this.personalDoctor = personalDoctor;
     }
 
@@ -86,5 +88,15 @@ public class Patient {
 
     public void setVisits(List<Visit> visits) {
         this.visits = visits;
+    }
+
+    public void addVisit(Visit visit) {
+        visits.add(visit);
+        visit.setPatient(this);
+    }
+
+    public void removeVisit(Visit visit) {
+        visits.remove(visit);
+        visit.setPatient(null);
     }
 }

@@ -2,6 +2,7 @@ package com.example.spring_boot.entity;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "doctor")
@@ -9,6 +10,7 @@ public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "doctorid")
     private Long doctorID;
 
     @Column(nullable = false, length = 100)
@@ -24,6 +26,12 @@ public class Doctor {
     // One doctor can be the personal doctor for many patients
     @OneToMany(mappedBy = "personalDoctor")
     private List<Patient> patients;
+
+    /**
+     * A doctor can have multiple visits.
+     */
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Visit> visits = new ArrayList<>();
 
     // Constructors
     public Doctor() {}
@@ -59,7 +67,7 @@ public class Doctor {
         this.specializations = specializations;
     }
 
-    public boolean isPersonalDoctor() {
+    public boolean getPersonalDoctor() {
         return isPersonalDoctor;
     }
 
@@ -73,5 +81,15 @@ public class Doctor {
 
     public void setPatients(List<Patient> patients) {
         this.patients = patients;
+    }
+
+    public void addVisit(Visit visit) {
+        visits.add(visit);
+        visit.setDoctor(this);
+    }
+
+    public void removeVisit(Visit visit) {
+        visits.remove(visit);
+        visit.setDoctor(null);
     }
 }
