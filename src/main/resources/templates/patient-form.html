@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Patient Form</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Medical Records</a>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h1 class="mb-3">Patient Form</h1>
+
+  <form th:action="@{/app/patients}" th:object="${patient}" method="post" class="row g-3">
+    <div class="col-md-6">
+      <label for="name" class="form-label">Name:</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control"/>
+    </div>
+
+    <div class="col-md-6">
+      <label for="personalNumber" class="form-label">Personal Number:</label>
+      <input type="text" id="personalNumber" th:field="*{personalNumber}" class="form-control"/>
+    </div>
+
+    <div class="col-md-6">
+      <label for="hasPaidInsuranceForLast6Months" class="form-label">Paid Insurance (6 Months)?</label>
+      <div class="form-check">
+        <input type="checkbox" id="hasPaidInsuranceForLast6Months" th:field="*{hasPaidInsuranceForLast6Months}" class="form-check-input"/>
+        <label class="form-check-label" for="hasPaidInsuranceForLast6Months">Yes</label>
+      </div>
+    </div>
+
+    <!-- Hidden ID for editing if necessary -->
+    <input type="hidden" th:field="*{patientID}" />
+
+    <div class="col-12">
+      <button type="submit" class="btn btn-success">Save</button>
+      <a th:href="@{/app/patients}" class="btn btn-secondary">Back to Patient List</a>
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

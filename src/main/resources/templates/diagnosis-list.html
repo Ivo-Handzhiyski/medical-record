@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Diagnosis List</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Medical Records</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1 class="mb-3">Diagnosis List</h1>
+    <a th:href="@{/app/diagnoses/new}" class="btn btn-primary mb-3">Add New Diagnosis</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Diagnosis Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="diag : ${diagnoses}">
+            <td th:text="${diag.diagnosisID}">1</td>
+            <td th:text="${diag.diagnosisName}">Example Diagnosis</td>
+            <td>
+                <a th:href="@{/app/diagnoses/edit/{id}(id=${diag.diagnosisID})}" class="btn btn-sm btn-warning">Edit</a>
+                <a th:href="@{/app/diagnoses/delete/{id}(id=${diag.diagnosisID})}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS (optional if you need interactive components) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

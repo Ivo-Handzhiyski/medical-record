@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>Visit List</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Medical Records</a>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h1 class="mb-3">Visit List</h1>
+
+  <!-- Hide "Add New Visit" from patients; only DOCTOR or ADMIN can see it -->
+  <a th:href="@{/app/visits/new}"
+     class="btn btn-primary mb-3"
+     sec:authorize="hasAnyRole('ROLE_DOCTOR','ROLE_ADMIN')">
+    Add New Visit
+  </a>
+
+  <table class="table table-hover table-bordered">
+    <thead class="table-light">
+    <tr>
+      <th>ID</th>
+      <th>Patient ID</th>
+      <th>Doctor ID</th>
+      <th>Visit Date</th>
+      <th>Diagnosis ID</th>
+      <th>Treatment ID</th>
+      <th>Sick Note ID</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!--
+       Option A: Display all visits, but conditionally hide or show controls.
+       Option B: Hide entire rows from a patient if the row isn't theirs.
+                 For that, add sec:authorize on the <tr> or a conditional th:if.
+                 Example:
+                 <tr th:each="v : ${visits}"
+                     sec:authorize="hasAnyRole('DOCTOR','ADMIN')
+                         or (#authentication.principal.username == v.patient.user.username)">
+
+                     ...
+                 </tr>
+     -->
+    <tr th:each="v : ${visits}">
+      <td th:text="${v.visitID}">1</td>
+      <td th:text="${v.patient != null ? v.patient.patientID : 'N/A'}">PatientID</td>
+      <td th:text="${v.doctor != null ? v.doctor.doctorID : 'N/A'}">DoctorID</td>
+      <td th:text="${v.visitDate}">2025-01-01T10:00</td>
+      <td th:text="${v.diagnosis != null ? v.diagnosis.diagnosisID : 'N/A'}">DiagnosisID</td>
+      <td th:text="${v.treatment != null ? v.treatment.treatmentID : 'N/A'}">TreatmentID</td>
+      <td th:text="${v.sickNote != null ? v.sickNote.sickNoteID : 'N/A'}">SickNoteID</td>
+
+      <td>
+        <!-- Edit/Delete only for DOCTOR or ADMIN -->
+        <a th:href="@{/app/visits/edit/{id}(id=${v.visitID})}"
+           class="btn btn-sm btn-warning"
+           sec:authorize="hasAnyRole('ROLE_DOCTOR','ROLE_ADMIN')">
+          Edit
+        </a>
+        <a th:href="@{/app/visits/delete/{id}(id=${v.visitID})}"
+           class="btn btn-sm btn-danger"
+           sec:authorize="hasAnyRole('ROLE_DOCTOR','ROLE_ADMIN')">
+          Delete
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
